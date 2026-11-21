@@ -144,7 +144,6 @@ spec:
       targetPort: 8084
 
 ---
----
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -161,19 +160,10 @@ spec:
     spec:
       containers:
         - name: api-gateway
-          image: eclipse-temurin:21-jre-alpine
-          command: ["java", "-jar", "/app/app.jar"]
-          imagePullPolicy: IfNotPresent
+          image: api-gateway:latest
+          imagePullPolicy: Never
           ports:
             - containerPort: 8081
-          volumeMounts:
-            - name: app-jar
-              mountPath: /app
-      volumes:
-        - name: app-jar
-          hostPath:
-            path: /run/desktop/mnt/host/c/Users/Stivan/Desktop/JavaDev/api-gateway/target
-            type: Directory
             
 ---
 apiVersion: apps/v1
@@ -209,4 +199,42 @@ spec:
     app: notification-service
   ports:
     - port: 8085
-      targetPort: 8085            
+      targetPort: 8085          
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: payment-service
+  template:
+    metadata:
+      labels:
+        app: payment-service
+    spec:
+      containers:
+        - name: payment-service
+          image: payment-service:latest
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8086
+          env:
+            - name: STRIPE_API_KEY
+              valueFrom:
+                secretKeyRef:
+                  name: stripe-secret
+                  key: STRIPE_API_KEY
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-service
+spec:
+  selector:
+    app: payment-service
+  ports:
+    - port: 8086
+      targetPort: 8086      
