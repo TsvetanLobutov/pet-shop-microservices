@@ -15,6 +15,7 @@ Welcome to my full-stack, event-driven e-commerce platform. This repository is t
 | **Order Service** | [order-service](https://github.com/TsvetanLobutov/order-service) | Spring Boot, PostgreSQL, Kafka producer |
 | **Review Service** | [review-service](https://github.com/TsvetanLobutov/review-service) | Spring Boot, MongoDB |
 | **Notification Service** | [notification-service](https://github.com/TsvetanLobutov/notification-service) | Spring Boot, Kafka consumer |
+| **Payment Service** | [payment-service](https://github.com/TsvetanLobutov/payment-service) | Spring Boot, Stripe payment service |
 
 ### Request flow
 
